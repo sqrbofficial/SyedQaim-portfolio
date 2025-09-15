@@ -1,6 +1,9 @@
 import { GraduationCap, Heart, Code, Lightbulb } from "lucide-react";
+import { useOwner } from "@/contexts/OwnerContext";
+import EditableText from "@/components/EditableText";
 
 const About = () => {
+  const { getContent } = useOwner();
   const highlights = [
     {
       icon: GraduationCap,
@@ -28,12 +31,20 @@ const About = () => {
     <section id="about" className="section-padding bg-gradient-secondary">
       <div className="container-custom">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <EditableText 
+            section="about" 
+            field="title" 
+            className="text-4xl md:text-5xl font-bold mb-6"
+          >
             About <span className="text-gradient">Me</span>
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Driven by curiosity and powered by innovation
-          </p>
+          </EditableText>
+          <EditableText 
+            section="about" 
+            field="subtitle" 
+            className="text-xl text-muted-foreground max-w-3xl mx-auto"
+          >
+            {getContent('about', 'subtitle') || 'Driven by curiosity and powered by innovation'}
+          </EditableText>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -53,18 +64,23 @@ const About = () => {
           <div className="space-y-8">
             <div>
               <h3 className="text-2xl font-bold mb-4 text-gradient">My Journey</h3>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                I'm an A-Level student at Lahore Grammar School, Multan, with an insatiable passion for technology, 
-                artificial intelligence, and game development. My journey began with curiosity about how things work 
-                and evolved into creating innovative solutions that bridge the gap between imagination and reality.
-              </p>
+              <EditableText 
+                section="about" 
+                field="journey" 
+                className="text-lg text-muted-foreground leading-relaxed mb-6"
+                multiline
+              >
+                {getContent('about', 'journey') || "I'm an A-Level student at Lahore Grammar School, Multan, with an insatiable passion for technology, artificial intelligence, and game development. My journey began with curiosity about how things work and evolved into creating innovative solutions that bridge the gap between imagination and reality."}
+              </EditableText>
               
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                With over 3 years of experience in Unity game development, extensive work in Python automation, 
-                and a growing expertise in AI and machine learning, I'm constantly pushing the boundaries of what's 
-                possible. My interests span from developing family-bonding apps like FamConnect to creating 
-                AI-powered solutions for everyday problems.
-              </p>
+              <EditableText 
+                section="about" 
+                field="description" 
+                className="text-lg text-muted-foreground leading-relaxed"
+                multiline
+              >
+                {getContent('about', 'description') || "With over 3 years of experience in Unity game development, extensive work in Python automation, and a growing expertise in AI and machine learning, I'm constantly pushing the boundaries of what's possible. My interests span from developing family-bonding apps like FamConnect to creating AI-powered solutions for everyday problems."}
+              </EditableText>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">

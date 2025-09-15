@@ -1,7 +1,10 @@
 import { ArrowRight, Download } from "lucide-react";
 import heroBg from "@/assets/hero-bg.jpg";
+import { useOwner } from "@/contexts/OwnerContext";
+import EditableText from "@/components/EditableText";
 
 const Hero = () => {
+  const { getContent } = useOwner();
   const scrollToProjects = () => {
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -32,19 +35,23 @@ const Hero = () => {
         <div className="animate-fade-in-up">
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
             Hi, I'm{" "}
-            <span className="text-gradient block mt-2">
-              Syed Qaim Hussain
-            </span>
-            <span className="text-gradient block">
-              Raza Bukhari
-            </span>
+            <EditableText 
+              section="hero" 
+              field="name" 
+              className="text-gradient block mt-2"
+            >
+              {getContent('hero', 'name') || 'Syed Qaim Hussain Raza Bukhari'}
+            </EditableText>
           </h1>
           
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-4xl mx-auto leading-relaxed">
-            A passionate <span className="text-primary font-semibold">AI & Tech enthusiast</span>,{" "}
-            <span className="text-accent font-semibold">Unity Game Developer</span>, and{" "}
-            <span className="text-primary font-semibold">Automation Specialist</span> from Multan, Pakistan
-          </p>
+          <EditableText 
+            section="hero" 
+            field="subtitle" 
+            className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-4xl mx-auto leading-relaxed"
+            multiline
+          >
+            {getContent('hero', 'subtitle') || 'A passionate AI & Tech enthusiast, Unity Game Developer, and Automation Specialist from Multan, Pakistan'}
+          </EditableText>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <button 

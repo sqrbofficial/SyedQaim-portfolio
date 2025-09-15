@@ -1,6 +1,9 @@
 import { useState } from "react";
-import { Mail, MapPin, Send, Github, Linkedin, Youtube } from "lucide-react";
+import { Mail, MapPin, Send, Github, Linkedin, Youtube, Settings } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useOwner } from "@/contexts/OwnerContext";
+import EditableText from "@/components/EditableText";
+import OwnerAuthDialog from "@/components/OwnerAuthDialog";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -8,7 +11,9 @@ const Contact = () => {
     email: '',
     message: ''
   });
+  const [showOwnerDialog, setShowOwnerDialog] = useState(false);
   const { toast } = useToast();
+  const { isOwnerMode, enableOwnerMode, disableOwnerMode, getContent } = useOwner();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,10 +63,15 @@ const Contact = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Let's <span className="text-gradient">Connect</span>
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <EditableText 
+            section="contact" 
+            field="subtitle" 
+            className="text-xl text-muted-foreground max-w-3xl mx-auto"
+            multiline
+          >
             Ready to collaborate on innovative projects or discuss exciting opportunities? 
             I'd love to hear from you!
-          </p>
+          </EditableText>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
@@ -84,7 +94,13 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold">Email</h4>
-                  <p className="text-muted-foreground">syed.qaim@example.com</p>
+                  <EditableText 
+                    section="contact" 
+                    field="email" 
+                    className="text-muted-foreground"
+                  >
+                    {getContent('contact', 'email') || 'syed.qaim@example.com'}
+                  </EditableText>
                 </div>
               </div>
 
@@ -94,7 +110,13 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold">Location</h4>
-                  <p className="text-muted-foreground">Multan, Pakistan</p>
+                  <EditableText 
+                    section="contact" 
+                    field="location" 
+                    className="text-muted-foreground"
+                  >
+                    {getContent('contact', 'location') || 'Multan, Pakistan'}
+                  </EditableText>
                 </div>
               </div>
             </div>
@@ -198,7 +220,40 @@ const Contact = () => {
           <p className="text-muted-foreground">
             © 2024 Syed Qaim Hussain Raza Bukhari. Crafted with passion and innovation.
           </p>
+          
+          {/* Hidden Owner Button */}
+          <div className="mt-4">
+            {isOwnerMode ? (
+              <div className="flex items-center justify-center gap-4">
+                <span className="text-xs text-primary font-medium flex items-center gap-2">
+                  <Settings className="h-3 w-3" />
+                  Owner Mode Active
+                </span>
+                <button
+                  onClick={disableOwnerMode}
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Exit Owner Mode
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowOwnerDialog(true)}
+                className="text-xs text-muted-foreground/30 hover:text-muted-foreground transition-colors duration-300"
+                style={{ fontSize: '10px' }}
+              >
+                I'm the Owner
+              </button>
+            )}
+          </div>
         </div>
+
+        {/* Owner Authentication Dialog */}
+        <OwnerAuthDialog
+          open={showOwnerDialog}
+          onOpenChange={setShowOwnerDialog}
+          onAuthenticated={enableOwnerMode}
+        />
       </div>
     </section>
   );
