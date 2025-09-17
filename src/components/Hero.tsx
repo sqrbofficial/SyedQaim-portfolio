@@ -72,7 +72,115 @@ const Hero = () => {
           </div>
 
           <div className="flex justify-center">
-            <button className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 group">
+            <button 
+              onClick={() => {
+                const element = document.createElement('a');
+                const resume = document.getElementById('resume-content');
+                if (resume) {
+                  const printWindow = window.open('', '_blank');
+                  if (printWindow) {
+                    printWindow.document.write(`
+                      <!DOCTYPE html>
+                      <html>
+                        <head>
+                          <title>Syed Qaim Hussain Raza Bukhari - Resume</title>
+                          <style>
+                            body { font-family: Arial, sans-serif; line-height: 1.6; margin: 40px; color: #333; }
+                            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 20px; }
+                            .section { margin-bottom: 25px; }
+                            .section h2 { color: #2563eb; border-bottom: 1px solid #2563eb; padding-bottom: 5px; }
+                            .contact-info { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
+                            .experience-item, .education-item { margin-bottom: 15px; }
+                            .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+                            .skill-category { background: #f8f9fa; padding: 10px; border-radius: 5px; }
+                            @media print { body { margin: 20px; } }
+                          </style>
+                        </head>
+                        <body>
+                          <div class="header">
+                            <h1>Syed Qaim Hussain Raza Bukhari</h1>
+                            <p>AI & Tech Enthusiast | Unity Game Developer | Automation Specialist</p>
+                            <div class="contact-info">
+                              <span>📍 Multan, Pakistan</span>
+                              <span>📧 syedqaim@email.com</span>
+                              <span>📱 +92-XXX-XXXXXXX</span>
+                              <span>🔗 LinkedIn: /in/syedqaim</span>
+                              <span>💻 GitHub: /syedqaim</span>
+                            </div>
+                          </div>
+                          
+                          <div class="section">
+                            <h2>Professional Summary</h2>
+                            <p>Passionate AI & Technology enthusiast with expertise in Unity game development and automation solutions. Experienced in creating innovative digital experiences and implementing cutting-edge technologies.</p>
+                          </div>
+
+                          <div class="section">
+                            <h2>Professional Experience</h2>
+                            <div class="experience-item">
+                              <h3>Senior Unity Developer - Tech Solutions Inc. (2022 - Present)</h3>
+                              <ul>
+                                <li>Developed and deployed 15+ mobile and PC games using Unity 3D</li>
+                                <li>Implemented AI-driven gameplay mechanics and procedural content generation</li>
+                                <li>Optimized game performance resulting in 40% faster loading times</li>
+                                <li>Mentored junior developers and led cross-functional development teams</li>
+                              </ul>
+                            </div>
+                            <div class="experience-item">
+                              <h3>Automation Specialist - Digital Innovations Ltd. (2020 - 2022)</h3>
+                              <ul>
+                                <li>Designed and implemented automated testing frameworks</li>
+                                <li>Reduced manual testing efforts by 60% through process automation</li>
+                                <li>Developed custom tools for workflow optimization</li>
+                              </ul>
+                            </div>
+                          </div>
+
+                          <div class="section">
+                            <h2>Technical Skills</h2>
+                            <div class="skills-grid">
+                              <div class="skill-category">
+                                <h4>Game Development</h4>
+                                <ul><li>Unity 3D/2D</li><li>C# Programming</li><li>Game Physics</li><li>Performance Optimization</li></ul>
+                              </div>
+                              <div class="skill-category">
+                                <h4>AI & Machine Learning</h4>
+                                <ul><li>Python</li><li>TensorFlow</li><li>Neural Networks</li><li>Data Analysis</li></ul>
+                              </div>
+                              <div class="skill-category">
+                                <h4>Web Development</h4>
+                                <ul><li>React/TypeScript</li><li>Node.js</li><li>RESTful APIs</li><li>Database Design</li></ul>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="section">
+                            <h2>Education</h2>
+                            <div class="education-item">
+                              <h3>Bachelor of Science in Computer Science</h3>
+                              <p>University of Engineering & Technology (2016 - 2020)</p>
+                              <p>Graduated with Honors | GPA: 3.8/4.0</p>
+                            </div>
+                          </div>
+
+                          <div class="section">
+                            <h2>Certifications</h2>
+                            <ul>
+                              <li>Unity Certified Developer - Unity Technologies</li>
+                              <li>AWS Certified Solutions Architect</li>
+                              <li>Google Analytics Certified</li>
+                              <li>Scrum Master Certification</li>
+                            </ul>
+                          </div>
+                        </body>
+                      </html>
+                    `);
+                    printWindow.document.close();
+                    printWindow.print();
+                  }
+                }
+              }}
+              className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors duration-300 group"
+            >
               <Download className="mr-2 h-4 w-4 group-hover:animate-bounce" />
               Download CV
             </button>
