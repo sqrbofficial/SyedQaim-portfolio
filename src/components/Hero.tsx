@@ -2,9 +2,10 @@ import { ArrowRight, Download } from "lucide-react";
 import heroBg from "@/assets/hero-bg.jpg";
 import { useOwner } from "@/contexts/OwnerContext";
 import EditableText from "@/components/EditableText";
+import LinkEditor from "@/components/LinkEditor";
 
 const Hero = () => {
-  const { getContent } = useOwner();
+  const { getContent, getLink, updateLink, isOwnerMode } = useOwner();
   const scrollToProjects = () => {
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -54,21 +55,55 @@ const Hero = () => {
           </EditableText>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <button 
-              onClick={scrollToProjects}
-              className="btn-hero group"
-            >
-              View Projects
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </button>
+            <div className="relative">
+              <button 
+                onClick={() => {
+                  const link = getLink('hero-projects');
+                  if (link) {
+                    window.open(link, '_blank');
+                  } else {
+                    scrollToProjects();
+                  }
+                }}
+                className="btn-hero group"
+              >
+                View Projects
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </button>
+              {isOwnerMode && (
+                <LinkEditor
+                  buttonText="View Projects"
+                  currentLink={getLink('hero-projects')}
+                  onUpdateLink={(link) => updateLink('hero-projects', link)}
+                  className="-top-2 -right-2"
+                />
+              )}
+            </div>
             
-            <button 
-              onClick={scrollToContact}
-              className="btn-secondary group"
-            >
-              Contact Me
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </button>
+            <div className="relative">
+              <button 
+                onClick={() => {
+                  const link = getLink('hero-contact');
+                  if (link) {
+                    window.open(link, '_blank');
+                  } else {
+                    scrollToContact();
+                  }
+                }}
+                className="btn-secondary group"
+              >
+                Contact Me
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </button>
+              {isOwnerMode && (
+                <LinkEditor
+                  buttonText="Contact Me"
+                  currentLink={getLink('hero-contact')}
+                  onUpdateLink={(link) => updateLink('hero-contact', link)}
+                  className="-top-2 -right-2"
+                />
+              )}
+            </div>
           </div>
 
           <div className="flex justify-center">

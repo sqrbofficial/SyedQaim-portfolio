@@ -1,95 +1,40 @@
 import { Brain, Gamepad2, Code, Smartphone, Globe, Cog } from "lucide-react";
+import { useOwner } from "@/contexts/OwnerContext";
+import SkillEditor from "@/components/SkillEditor";
 
 const Skills = () => {
-  const skillCategories = [
-    {
-      icon: Brain,
-      title: "AI & Machine Learning",
-      level: "Intermediate",
-      color: "text-accent",
-      skills: [
-        "Machine Learning Theory",
-        "AI Model Implementation", 
-        "Computer Vision",
-        "Natural Language Processing",
-        "Emotion Detection",
-        "AI Assistant Development"
-      ]
-    },
-    {
-      icon: Gamepad2,
-      title: "Unity Game Development",
-      level: "Advanced (3 years)",
-      color: "text-primary",
-      skills: [
-        "3D Game Development",
-        "Game Physics & Mechanics",
-        "UI/UX Design",
-        "Performance Optimization",
-        "Cross-platform Development",
-        "Game Analytics"
-      ]
-    },
-    {
-      icon: Code,
-      title: "Programming Languages",
-      level: "Proficient",
-      color: "text-green-400",
-      skills: [
-        "Python (Advanced)",
-        "C# (Unity)",
-        "JavaScript/TypeScript",
-        "Java (Android)",
-        "Dart (Flutter)",
-        "Git Version Control"
-      ]
-    },
-    {
-      icon: Smartphone,
-      title: "Mobile Development",
-      level: "Intermediate",
-      color: "text-blue-400",
-      skills: [
-        "Android Studio",
-        "Flutter Framework",
-        "Mobile UI/UX",
-        "App Store Deployment",
-        "Cross-platform Apps",
-        "Mobile Optimization"
-      ]
-    },
-    {
-      icon: Globe,
-      title: "Web Development",
-      level: "Growing",
-      color: "text-orange-400",
-      skills: [
-        "HTML/CSS",
-        "React Basics",
-        "Responsive Design",
-        "VS Code Workflow",
-        "Web APIs",
-        "Frontend Frameworks"
-      ]
-    },
-    {
-      icon: Cog,
-      title: "Automation & Tools",
-      level: "Advanced",
-      color: "text-purple-400",
-      skills: [
-        "n8n Automation",
-        "Python Bots",
-        "Instagram Automation",
-        "E-commerce Tools", 
-        "API Integration",
-        "Workflow Optimization"
-      ]
-    }
-  ];
+  const { getSkillCategories, updateSkillCategories, isOwnerMode } = useOwner();
+  const skillCategories = getSkillCategories();
+
+  const iconMap = {
+    "ai-ml": Brain,
+    "unity-dev": Gamepad2,
+    "programming": Code,
+    "mobile-dev": Smartphone,
+    "web-dev": Globe,
+    "automation": Cog
+  };
+
+  const colorMap = {
+    "ai-ml": "text-accent",
+    "unity-dev": "text-primary",
+    "programming": "text-green-400",
+    "mobile-dev": "text-blue-400",
+    "web-dev": "text-orange-400",
+    "automation": "text-purple-400"
+  };
+
+  const getIcon = (categoryId: string) => iconMap[categoryId as keyof typeof iconMap] || Brain;
+  const getColor = (categoryId: string) => colorMap[categoryId as keyof typeof colorMap] || "text-primary";
+
+  const calculateCategoryPercentage = (skills: any[]) => {
+    if (skills.length === 0) return 0;
+    const total = skills.reduce((sum, skill) => sum + skill.percentage, 0);
+    return Math.round(total / skills.length);
+  };
 
   return (
-    <section id="skills" className="section-padding">
+    <section id="skills" className="section-padding relative">
       <div className="container-custom">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
@@ -101,56 +46,64 @@ const Skills = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {skillCategories.map((category, index) => (
-            <div key={index} className="card-project group">
-              <div className="p-8">
-                <div className="flex items-center mb-6">
-                  <div className={`p-3 rounded-lg bg-gradient-secondary ${category.color} mr-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <category.icon className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold">{category.title}</h3>
-                    <span className={`text-sm ${category.color} font-medium`}>
-                      {category.level}
-                    </span>
-                  </div>
-                </div>
+          {skillCategories.map((category) => {
+            const IconComponent = getIcon(category.id);
+            const color = getColor(category.id);
+            const avgPercentage = calculateCategoryPercentage(category.skills);
 
-                <div className="space-y-3">
-                  {category.skills.map((skill, skillIndex) => (
-                    <div key={skillIndex} className="flex items-center">
-                      <div className="w-2 h-2 bg-primary rounded-full mr-3 group-hover:bg-accent transition-colors duration-300"></div>
-                      <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-                        {skill}
+            return (
+              <div key={category.id} className="card-project group">
+                <div className="p-8">
+                  <div className="flex items-center mb-6">
+                    <div className={`p-3 rounded-lg bg-gradient-secondary ${color} mr-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <IconComponent className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold">{category.title}</h3>
+                      <span className={`text-sm ${color} font-medium`}>
+                        {category.level}
                       </span>
                     </div>
-                  ))}
-                </div>
-
-                {/* Skill level indicator */}
-                <div className="mt-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-muted-foreground">Proficiency</span>
-                    <span className="text-sm font-medium">
-                      {category.level === "Advanced" || category.level === "Advanced (3 years)" ? "90%" :
-                       category.level === "Intermediate" ? "70%" :
-                       category.level === "Proficient" ? "80%" : "60%"}
-                    </span>
                   </div>
-                  <div className="w-full bg-muted rounded-full h-2">
-                    <div 
-                      className={`h-2 rounded-full bg-gradient-primary transition-all duration-500 group-hover:shadow-glow`}
-                      style={{
-                        width: category.level === "Advanced" || category.level === "Advanced (3 years)" ? "90%" :
-                               category.level === "Intermediate" ? "70%" :
-                               category.level === "Proficient" ? "80%" : "60%"
-                      }}
-                    ></div>
+
+                  <div className="space-y-3">
+                    {category.skills.map((skill) => (
+                      <div key={skill.id} className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-300 text-sm">
+                            {skill.name}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {skill.percentage}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-muted rounded-full h-2">
+                          <div 
+                            className="h-2 rounded-full bg-gradient-primary transition-all duration-500 group-hover:shadow-glow"
+                            style={{ width: `${skill.percentage}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Overall proficiency indicator */}
+                  <div className="mt-6">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm text-muted-foreground">Overall Proficiency</span>
+                      <span className="text-sm font-medium">{avgPercentage}%</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div 
+                        className="h-2 rounded-full bg-gradient-primary transition-all duration-500 group-hover:shadow-glow"
+                        style={{ width: `${avgPercentage}%` }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Additional Technologies */}
@@ -172,6 +125,14 @@ const Skills = () => {
           </div>
         </div>
       </div>
+
+      {/* Skills Editor for Owner Mode */}
+      {isOwnerMode && (
+        <SkillEditor 
+          categories={skillCategories}
+          onUpdateCategories={updateSkillCategories}
+        />
+      )}
     </section>
   );
 };
